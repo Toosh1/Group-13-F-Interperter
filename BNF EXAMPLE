@@ -1,0 +1,15 @@
+<Assignment>       ::= <Variable> "=" <Expression>
+<Expression>       ::= <Term> <ExpressionOpt>
+<ExpressionOpt>    ::= "+" <Term> <ExpressionOpt> | 
+                       "-" <Term> <ExpressionOpt> | 
+                       ε
+<Term>            ::= <Factor> <TermOpt>
+<TermOpt>         ::= "*" <Factor> <TermOpt> | 
+                       "/" <Factor> <TermOpt> | 
+                       "%" <Factor> <TermOpt> | 
+                       ε
+<Factor>          ::= <Base> <FactorOpt>
+<FactorOpt>       ::= "^" <Base> <FactorOpt> | 
+                       ε
+<Base>            ::= "Num" | <Variable> |"(" <Expression> ")"
+<Variable> 	  ::= "Letter"
