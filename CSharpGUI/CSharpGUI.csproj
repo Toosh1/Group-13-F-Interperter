@@ -25,27 +25,23 @@
     <ItemGroup>
       <None Remove="Views\Icons\derivative.jpg" />
       <None Remove="Views\Icons\equal.png" />
-      <Resource Include="Views\Icons\equal.png" />
       <None Remove="Views\Icons\integral.png" />
       <Resource Include="Views\Icons\integral.png" />
       <None Remove="Views\Icons\plot.png" />
-      <Resource Include="Views\Icons\plot.png" />
       <None Remove="Views\Icons\roots.png" />
-      <Resource Include="Views\Icons\roots.png" />
       <None Remove="Views\Icons\derivative.png" />
-      <Resource Include="Views\Icons\derivative.png" />
       <None Remove="Views\Icons\tangent.png" />
-      <Resource Include="Views\Icons\tangent.png" />
       <None Remove="Views\Icons\cross.png" />
-      <Resource Include="Views\Icons\cross.png" />
       <None Remove="Views\Icons\determinant.png" />
       <Resource Include="Views\Icons\determinant.png" />
       <None Remove="Views\Icons\dot.png" />
       <Resource Include="Views\Icons\dot.png" />
       <None Remove="Views\Icons\Mult.png" />
-      <Resource Include="Views\Icons\Mult.png" />
       <None Remove="Views\Icons\normal.png" />
-      <Resource Include="Views\Icons\normal.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Views\Icons\derivative.jpg" />
     </ItemGroup>
 
 </Project>

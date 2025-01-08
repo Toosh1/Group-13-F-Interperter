@@ -275,5 +275,5 @@ C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net6.0-windows\runtimes\win-x86\native\MonoPosixHelper.dll
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net6.0-windows\runtimes\win-x86\native\libMonoPosixHelper.dll
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net6.0-windows\CommunityToolkit.Mvvm.dll
-C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\InputDialog.g.cs
-C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\InputDialog.baml
+C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net6.0-windows\Interpreter.fs
+C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\CSharpGUI_Content.g.cs

@@ -133,3 +133,4 @@ C:\Users\olive\source\repos\Toosh1\F-Interpreter\Learning\FSharpLibrary\obj\Debu
 C:\Users\olive\source\repos\Toosh1\F-Interpreter\Learning\FSharpLibrary\obj\Debug\net6.0\FSharpLibrary.dll
 C:\Users\olive\source\repos\Toosh1\F-Interpreter\Learning\FSharpLibrary\obj\Debug\net6.0\FSharpLibrary.pdb
 C:\Users\olive\source\repos\Toosh1\F-Interpreter\Learning\FSharpLibrary\obj\Debug\net6.0\FSharpLibrary.genruntimeconfig.cache
+C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\FSharpLibrary\bin\Debug\net6.0\Interpreter.fs
