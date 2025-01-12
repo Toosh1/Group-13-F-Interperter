@@ -194,6 +194,21 @@
         let du = differentiateExpression u
         let dv = differentiateExpression v
         sprintf "((%s) * (%s) - (%s) * (%s)) / ((%s)^2)" du v u dv v
+     //identify which rule to use
+    let identifyDifferentiationRule (expr: string) : string =
+        let productPattern = @"(.+)\s*\*\s*(.+)"
+        let quotientPattern = @"(.+)\s*\/\s*(.+)"
+        let chainPattern = @"\w+\(([^)]+)\)" 
+        let sumPattern = @"(.+)\s*\+\s*(.+)"
+        let subtractPattern = @"(.+)\s*-\s*(.+)"
+
+        match expr with
+        | _ when Regex.IsMatch(expr, productPattern) -> "Product Rule"
+        | _ when Regex.IsMatch(expr, quotientPattern) -> "Quotient Rule"
+        | _ when Regex.IsMatch(expr, chainPattern) -> "Chain Rule"
+        | _ when Regex.IsMatch(expr, sumPattern) -> "Sum Rule"
+        | _ when Regex.IsMatch(expr, subtractPattern) -> "Sum Rule"
+        | _ -> "Polynomial Rule (basic differentiation)"
 
     // Polynomial integration functions
     let integrate (coefficients: float list) (powers: int list) : float list * int list =
