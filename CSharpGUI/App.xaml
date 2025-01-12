@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:Learning"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="ToolTip">
+            <Setter Property="ToolTipService.InitialShowDelay" Value="500"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
+            <Setter Property="ToolTipService.BetweenShowDelay" Value="200"/>
+        </Style>
     </Application.Resources>
 </Application>

@@ -276,7 +276,6 @@ C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net6.0-windows\runtimes\win-x86\native\libMonoPosixHelper.dll
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net6.0-windows\CommunityToolkit.Mvvm.dll
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\bin\Debug\net6.0-windows\Interpreter.fs
-C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\CSharpGUI_Content.g.cs
 C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\bin\Debug\net6.0-windows\FSharpLibrary.deps.json
 C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\bin\Debug\net6.0-windows\FSharpLibrary.runtimeconfig.json
 C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\bin\Debug\net6.0-windows\FSharpLibrary.exe
@@ -364,3 +363,6 @@ C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\obj\Debug\net6.
 C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\obj\Debug\net6.0-windows\ref\CSharpGUI.dll
 C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\obj\Debug\net6.0-windows\Views\InputWindow.g.cs
 C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\obj\Debug\net6.0-windows\Views\InputWindow.baml
+C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\Views\InputWindow.g.cs
+C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\Views\InputWindow.baml
+C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\App.baml

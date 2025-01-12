@@ -18,6 +18,9 @@
                 <MenuItem Header="Solving Formulas" Click="HelpSolving_OnClick"/>
                 <MenuItem Header="Plotting Graphs" Click="HelpPlotting_OnClick"/>
                 <MenuItem Header="Differentiation" Click="HelpDifferentiation_OnClick"/>
+                <MenuItem Header="Integration" Click="HelpIntegration_OnClick"/>
+                <MenuItem Header="Vectors" Click="HelpVectors_OnClick"/>
+                <MenuItem Header="Matricies" Click="HelpMatricies_OnClick"/>
             </MenuItem>
             <MenuItem Header="Insert">
                 <MenuItem Header="π" Click="pi_OnClick"/>
@@ -65,7 +68,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Name="btnAnswer" Click="BtnAnswer_OnClick" Grid.Row="0" Grid.Column="0" Margin="5">
+                <Button Name="btnAnswer" Click="BtnAnswer_OnClick" Grid.Row="0" Grid.Column="0" Margin="5" ToolTip="Calculate">
                     <Image Source="Views/Icons/equals.png"/>
                 </Button>
                 <Button Name="btnPlot" Click="BtnPlot_OnClick" Grid.Row="0" Grid.Column="1" Margin="5">

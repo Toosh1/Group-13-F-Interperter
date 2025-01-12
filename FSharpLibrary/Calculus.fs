@@ -1,7 +1,13 @@
-﻿module FSharpLibrary.Calculus
+﻿// Calculus Function
+// Author: Joshua Allan 
+// Date: <Today's Date>
+// Reference: Peter Sestoft, Grammars and parsing with F#, Tech. Report
+
+module FSharpLibrary.Calculus
     open System
     open System.Collections.Generic
     open System.Text.RegularExpressions
+    
     let parsePolynomial (poly: string) : float list * int list =
         let pattern = @"([+-]?\d*\.?\d*)?(x(?:\^(\d+))?)?"
         let terms = 

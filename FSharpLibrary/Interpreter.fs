@@ -12,7 +12,7 @@ module public interpreter
 
     // Define terminal symbols, now supporting floating-point numbers (Num of float)
     type terminal = 
-        Add | Sub | Mul | Div | Lpar | Rpar | Rem | Pow | Num of float | Sin | Cos | Tan | Arcsin | Arccos | Arctan |Exp |Log |Pi| Euluer 
+        Add | Sub | Mul | Div | Lpar | Rpar | Rem | Pow | Num of float | Sin | Cos | Tan | Arcsin | Arccos | Arctan |Exp |Log |Pi| Euluer | Csc | Cot | Sec
         | Var of char
         | Assign
         
@@ -27,53 +27,7 @@ module public interpreter
         elif exp = 1.0 then num
         else num * floatPow num (exp - 1.0)
         
-    // Polynomial differentiation functions
-    
-   
-    //Function to handle matrix/vector input and operations
-    // let matrixVectorInteraction () =
-    //     Console.WriteLine("Choose an operation:")
-    //     Console.WriteLine("1: Dot Product (Vectors)")
-    //     Console.WriteLine("2: Cross Product (Vectors)")
-    //     Console.WriteLine("3: Norm (Vector)")
-    //     Console.WriteLine("4: Determinant (Matrix)")
-    //     Console.WriteLine("5: Matrix Multiplication")
-    //     let choice = Console.ReadLine().Trim()
-    //     match choice with
-    //     | "1" ->
-    //         Console.Write("Enter first vector (e.g., 1,2,3): ")
-    //         let v1 = Console.ReadLine().Split(',') |> Array.map float |> Array.toList
-    //         Console.Write("Enter second vector: ")
-    //         let v2 = Console.ReadLine().Split(',') |> Array.map float |> Array.toList
-    //         let result = VectorOps.dotProduct v1 v2
-    //         Console.WriteLine($"Dot Product: {result}")
-    //     | "2" ->
-    //         Console.Write("Enter first vector (3D only): ")
-    //         let v1 = Console.ReadLine().Split(',') |> Array.map float |> Array.toList
-    //         Console.Write("Enter second vector (3D only): ")
-    //         let v2 = Console.ReadLine().Split(',') |> Array.map float |> Array.toList
-    //         let result = VectorOps.crossProduct v1 v2
-    //         Console.WriteLine($"""Cross Product: {String.Join(",", result)}""")
-    //     | "3" ->
-    //         Console.Write("Enter vector: ")
-    //         let v = Console.ReadLine().Split(',') |> Array.map float |> Array.toList
-    //         let result = VectorOps.norm v
-    //         Console.WriteLine($"Norm: {result}")
-    //     | "4" ->
-    //         Console.WriteLine("Enter matrix rows, separated by ';' (e.g., 1,2;3,4): ")
-    //         let matrix = Console.ReadLine().Split(';') |> Array.map (fun row -> row.Split(',') |> Array.map float |> Array.toList) |> Array.toList
-    //         let result = MatrixOps.determinant matrix
-    //         Console.WriteLine($"Determinant: {result}")
-    //     | "5" ->
-    //         Console.WriteLine("Enter first matrix rows, separated by ';': ")
-    //         let m1 = Console.ReadLine().Split(';') |> Array.map (fun row -> row.Split(',') |> Array.map float |> Array.toList) |> Array.toList
-    //         Console.WriteLine("Enter second matrix rows, separated by ';': ")
-    //         let m2 = Console.ReadLine().Split(';') |> Array.map (fun row -> row.Split(',') |> Array.map float |> Array.toList) |> Array.toList
-    //         let result = MatrixOps.multiply m1 m2
-    //         Console.WriteLine("Resulting Matrix:")
-    //         result |> List.iter (fun row -> Console.WriteLine(String.Join(",", row)))
-    //     | _ ->
-    //         Console.WriteLine("Invalid choice.")
+  
     // ---- Checks and errors ----
     let isblank c = System.Char.IsWhiteSpace c 
     let isdigit c = System.Char.IsDigit c
@@ -83,28 +37,24 @@ module public interpreter
 
     
     let variables = Dictionary<char, float>()
-    // Scanner for floating-point numbers, scanning digits after the decimal point
     let rec scFloat (iStr, iVal, decPlace) = 
         match iStr with
         | c :: tail when isdigit c -> scFloat(tail, iVal + (floatVal c) / decPlace, decPlace * 10.0)
         | _ -> (iStr, iVal)
-
-    // Extended scanner to handle both integers and floating-point numbers
     let rec scNum (iStr, iVal) =
         match iStr with
         | '.'::tail -> scFloat(tail, float iVal, 10.0)
         | c :: tail when isdigit c -> scNum(tail, 10.0 * iVal + floatVal c)
         | _ -> (iStr, iVal)
 
-    // Lexer function to tokenize the input string into terminal symbols
     let lexer input =
         let rec scan input =
             match input with
                 | [] -> []
                 | '+'::tail -> Add :: scan tail
                 | '-'::c::tail when isdigit c -> 
-                    let (iStr, iVal) = scNum(tail, -floatVal c) // Handle negative numbers properly here
-                    Num (-iVal) :: scan iStr
+                    let (iStr, iVal) = scNum(tail, -floatVal c)
+                    Num (iVal) :: scan iStr
                 | '-'::tail -> Sub :: scan tail
                 | '*'::tail -> Mul :: scan tail
                 | '/'::tail -> Div :: scan tail
@@ -113,9 +63,8 @@ module public interpreter
                 | '^'::tail -> Pow :: scan tail
                 | '%'::tail -> Rem :: scan tail
                 | '='::tail -> Assign :: scan tail
-                | c :: tail when isblank c -> scan tail // Skip whitespace
+                | c :: tail when isblank c -> scan tail 
                 | '.'::tail -> 
-                    // Handle floating point numbers starting with "."
                     let (iStr, iVal) = scFloat(tail, 0.0, 10.0)
                     Num iVal :: scan iStr
                 | c :: tail when isdigit c -> 
@@ -125,7 +74,10 @@ module public interpreter
                     | _ -> Num iVal :: scan iStr
                 | 's'::'i'::'n'::tail -> Sin :: scan tail 
                 | 'c'::'o'::'s'::tail -> Cos :: scan tail 
-                | 't'::'a'::'n'::tail -> Tan :: scan tail 
+                | 't'::'a'::'n'::tail -> Tan :: scan tail
+                | 's'::'e'::'c'::tail -> Sec :: scan tail
+                | 'c'::'o'::'t'::tail -> Cot :: scan tail
+                | 'c'::'s'::'c'::tail -> Csc :: scan tail
                 | 'e'::'x'::'p'::tail -> Exp :: scan tail 
                 | 'l'::'o'::'g'::tail -> Log :: scan tail
                 | 'a'::'r'::'c'::'s'::'i'::'n'::tail -> Arcsin :: scan tail
@@ -160,8 +112,6 @@ module public interpreter
     // <Base>            ::= "Num" | "(" <Expression> ")"
   
     
-    
-    // Parser function based on the grammar rules
     let parser tList =
         let rec A tList =  
             match tList with
@@ -198,6 +148,15 @@ module public interpreter
              | Tan :: tail -> 
                 let tailAfterExpr = F tail
                 tailAfterExpr
+             | Csc :: tail -> 
+                let tailAfterExpr = F tail
+                tailAfterExpr
+             | Cot :: tail -> 
+                let tailAfterExpr = F tail
+                tailAfterExpr
+             | Sec :: tail -> 
+                let tailAfterExpr = F tail
+                tailAfterExpr
              | Arcsin :: tail -> 
                 let tailAfterExpr = F tail
                 tailAfterExpr
@@ -219,8 +178,9 @@ module public interpreter
              | _ -> raise parseError
                 
         A tList
+    
+   
 
-    // Evaluation function (modified to handle floating-point numbers)
     let rec parseEvaluation tList = 
         let rec E tList = (T >> Eopt) tList
         and Eopt (tList, value) = 
@@ -236,21 +196,27 @@ module public interpreter
             | Mul :: tail -> let (tLst, tval) = F tail
                              Topt (tLst, value * tval)
             | Div :: tail -> let (tLst, tval) = F tail
-                             Topt (tLst, value / tval) // Floating-point division
+                             if tval = 0.0 then
+                                 raise (Exception("Error: Division by 0"))
+                             else
+                                 Topt (tLst, value / tval) 
             | Rem :: tail -> let (tLst, tval) = F tail
-                             Topt (tLst, value % tval)
+                             if tval = 0.0 then
+                                raise (Exception("Error: Division by 0"))
+                             else
+                                Topt (tLst, value % tval)
             | _ -> (tList, value)
         and F tList = (NR >> Fopt) tList
         and Fopt (tList, value) =
             match tList with
             | Pow :: tail -> let (tLst, tval) = NR tail
-                             Fopt (tLst, floatPow value tval) // Floating-point exponentiation
+                             Fopt (tLst, floatPow value tval)
             | _ -> (tList, value)
         and NR tList =
             match tList with
-            | Var name :: Assign :: tail -> // Handle variable assignment
+            | Var name :: Assign :: tail -> 
                 let (tLst, assignedValue) = E tail
-                variables.[name] <- assignedValue // Assign value to the variable
+                variables.[name] <- assignedValue
                 (tLst , assignedValue)
             | Sin :: tail -> 
                 let (tLst, tval) = F tail
@@ -261,6 +227,15 @@ module public interpreter
             | Tan :: tail -> 
                 let (tLst, tval) = F tail
                 (tLst, Math.Tan tval)
+            | Csc :: tail -> 
+                let (tLst, tval) = F tail
+                (tLst, 1.0 / (Math.Sin tval))
+            | Cot :: tail -> 
+                let (tLst, tval) = F tail
+                (tLst, 1.0 / (Math.Tan tval))
+            | Sec :: tail -> 
+                let (tLst, tval) = F tail
+                (tLst, 1.0 / (Math.Cos tval))
             | Arcsin :: tail -> 
                 let (tLst, tval) = F tail
                 (tLst, Math.Asin tval)
@@ -272,11 +247,11 @@ module public interpreter
                 (tLst, Math.Atan tval)
             | Log :: tail -> 
                 let (tLst, tval) = F tail
-                (tLst, Math.Log10 tval) // Future change bases
+                (tLst, Math.Log10 tval)
             | Num value :: tail -> (tail, value)
-            | Var name :: tail -> // Retrieve variable value
+            | Var name :: tail -> 
                 match variables.TryGetValue(name) with
-                | true, value -> (tail, value) // Return the variable's value
+                | true, value -> (tail, value) 
                 | false, _ -> raise (Exception(sprintf "Variable %c not defined" name))
             | Lpar :: tail -> let (tLst, tval) = E tail
                               match tLst with 
@@ -286,124 +261,11 @@ module public interpreter
         E tList
 
    
-        
-    // Main function to solve the input expression, now returning a float
     let solve(input) : float =
         let oList = lexer input
-        let Out = parseEvaluation oList
+        let Out = parseEvaluation oList 
         snd Out
         
     let overrideX(input) =
         variables.['x'] <- input
-    
-// Main function
-    // [<EntryPoint>]
-    // let main argv =
-    //     Console.WriteLine("Choose an operation:")
-    //     Console.WriteLine("1. Solve an expression (not implemented yet)")
-    //     Console.WriteLine("2. Differentiate a polynomial")
-    //     Console.WriteLine("3. Integrate a polynomial")
-    //     Console.WriteLine("4. Matrix and vector operations")
-    //     
-    //     let choice = Console.ReadLine().Trim()
-    //     
-    //     match choice with
-    //     | "1" -> 
-    //         Console.WriteLine("Expression solving feature is not implemented yet.")
-    //     | "2" ->
-    //         // Differentiation options menu
-    //         Console.WriteLine("Choose a differentiation method:")
-    //         Console.WriteLine("1. Polynomial or Expression Differentiation")
-    //         Console.WriteLine("2. Product Rule Differentiation")
-    //         Console.WriteLine("3. Quotient Rule Differentiation")
-    //         Console.WriteLine("4. Chain Rule Differentiation")
-    //         Console.Write("Enter your choice (1/2/3/4): ")
-    //         let differentiationChoice = Console.ReadLine().Trim()
-    //
-    //         match differentiationChoice with
-    //         | "1" ->
-    //             // Polynomial differentiation
-    //             Console.Write("Enter a polynomial or expression to differentiate (e.g., 3x + 3x^2 + sin(x) + cos(x)): ")
-    //             let exprInput = Console.ReadLine().Trim()
-    //
-    //             let differentiatedResult = differentiateExpression exprInput
-    //             Console.WriteLine($"Differentiated result: {differentiatedResult}")
-    //
-    //             Console.WriteLine("Would you like to calculate a root? (yes/no)")
-    //             let calculateRoot = Console.ReadLine().Trim().ToLower()
-    //
-    //             match calculateRoot with
-    //             | "yes" ->
-    //                 Console.Write("Enter the initial guess for the root (x0): ")
-    //                 let x0 = float (Console.ReadLine().Trim())
-    //                 Console.Write("Enter the acceptable error (Err): ")
-    //                 let err = float (Console.ReadLine().Trim())
-    //                 
-    //                 // Use Newton-Raphson to calculate the root
-    //                 let root = newtonRaphson exprInput x0 err
-    //                 Console.WriteLine($"Root found: {root}")
-    //             | _ -> 
-    //                 Console.WriteLine("Root calculation skipped.")
-    //
-    //         | "2" ->
-    //             // Product Rule differentiation
-    //             Console.Write("Enter the first function (u): ")
-    //             let u = Console.ReadLine().Trim()
-    //             Console.Write("Enter the second function (v): ")
-    //             let v = Console.ReadLine().Trim()
-    //             
-    //             let productResult = productRule u v
-    //             Console.WriteLine($"Derivative using the product rule: {productResult}")
-    //
-    //         | "3" ->
-    //             // Quotient Rule differentiation
-    //             Console.Write("Enter the numerator function (u): ")
-    //             let u = Console.ReadLine().Trim()
-    //             Console.Write("Enter the denominator function (v): ")
-    //             let v = Console.ReadLine().Trim()
-    //
-    //             let quotientResult = quotientRule u v
-    //             Console.WriteLine($"Derivative using the quotient rule: {quotientResult}")
-    //         | "4" ->
-    //             // Chain Rule differentiation
-    //             Console.Write("Enter the outer function (f): ")
-    //             let outer = Console.ReadLine().Trim()
-    //             Console.Write("Enter the inner function (g): ")
-    //             let inner = Console.ReadLine().Trim()
-    //
-    //             let chainResult = chainRule outer inner
-    //             Console.WriteLine($"Derivative using the chain rule: {chainResult}")
-    //
-    //
-    //         | _ -> 
-    //             Console.WriteLine("Invalid choice. Returning to the main menu.")
-    //         
-    //     | "3" -> 
-    //                 // Polynomial integration
-    //                 Console.Write("Enter a polynomial to integrate (e.g., 3x + 3x^2): ")
-    //                 let polyInput = Console.ReadLine().Trim()
-    //                 
-    //                 Console.WriteLine("Do you want to calculate the definite integral? (yes/no)")
-    //                 let calculateDefinite = Console.ReadLine().Trim().ToLower()
-    //                 
-    //                 match calculateDefinite with
-    //                 | "yes" ->
-    //                     Console.Write("Enter the lower bound (a): ")
-    //                     let a = float (Console.ReadLine().Trim())
-    //                     Console.Write("Enter the upper bound (b): ")
-    //                     let b = float (Console.ReadLine().Trim())
-    //                     
-    //                     let definiteResult = definiteIntegral polyInput a b
-    //                     Console.WriteLine($"The definite integral of {polyInput} from {a} to {b} is: {definiteResult}")
-    //                 | _ ->
-    //                     let integratedResult = integratePolynomial polyInput
-    //                     Console.WriteLine($"Integrated result: {integratedResult}")
-    //         
-    //     | "4" -> 
-    //         // Matrix and vector operations
-    //         matrixVectorInteraction() 
-    //         
-    //     | _ -> 
-    //         Console.WriteLine("Invalid input. Please choose 1, 2, 3, or 4.")
-    //
-    //     0
+ 
