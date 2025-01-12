@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\CSharpGUI\\CSharpGUI.csproj": {}
+    "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\CSharpGUI\\CSharpGUI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\CSharpGUI\\CSharpGUI.csproj": {
+    "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\CSharpGUI\\CSharpGUI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\CSharpGUI\\CSharpGUI.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\CSharpGUI\\CSharpGUI.csproj",
         "projectName": "CSharpGUI",
-        "projectPath": "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\CSharpGUI\\CSharpGUI.csproj",
-        "packagesPath": "C:\\Users\\Mateusz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\CSharpGUI\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\CSharpGUI\\CSharpGUI.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\CSharpGUI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Mateusz\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0-windows"
@@ -26,8 +26,8 @@
           "net6.0-windows7.0": {
             "targetAlias": "net6.0-windows",
             "projectReferences": {
-              "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\FSharpLibrary\\FSharpLibrary.fsproj": {
-                "projectPath": "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\FSharpLibrary\\FSharpLibrary.fsproj"
+              "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\FSharpLibrary\\FSharpLibrary.fsproj": {
+                "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\FSharpLibrary\\FSharpLibrary.fsproj"
               }
             }
           }
@@ -77,7 +77,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -89,26 +90,27 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\mateu\\.dotnet\\sdk\\6.0.418\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\FSharpLibrary\\FSharpLibrary.fsproj": {
+    "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\FSharpLibrary\\FSharpLibrary.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\FSharpLibrary\\FSharpLibrary.fsproj",
+        "projectUniqueName": "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\FSharpLibrary\\FSharpLibrary.fsproj",
         "projectName": "FSharpLibrary",
-        "projectPath": "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\FSharpLibrary\\FSharpLibrary.fsproj",
-        "packagesPath": "C:\\Users\\Mateusz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\FSharpLibrary\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\FSharpLibrary\\FSharpLibrary.fsproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\FSharpLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Mateusz\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Users\\mateu\\.dotnet\\sdk\\6.0.418\\FSharp\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -125,7 +127,7 @@
             "FSharp.Core": {
               "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
               "target": "Package",
-              "version": "[6.0.2, )",
+              "version": "[6.0.7, )",
               "generatePathProperty": true
             }
           },
@@ -135,7 +137,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -144,7 +147,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\mateu\\.dotnet\\sdk\\6.0.418\\RuntimeIdentifierGraph.json"
         }
       }
     }

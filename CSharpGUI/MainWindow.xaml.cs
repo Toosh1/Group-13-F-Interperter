@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FSharpLibrary;
+using Learning.Views;
 using LiveChart;
 using LiveCharts;
 using LiveCharts.Wpf;
@@ -166,17 +167,33 @@ public partial class MainWindow : Window
 
     private void BtnIntegrate_OnClick(object sender, RoutedEventArgs e)
     {
-        try
+        var inputDialog = new InputWindow("Enter upper bound and lower bound \n(Leave blank for indefinite)",true);
+        if (inputDialog.ShowDialog() == true)
         {
-            var input = tbInput.Text;
-            var integral = Calculus.integratePolynomial(input);
-            Console.WriteLine(integral);
-            tbAnswer.Text += string.Format("Integral: {0} :\n{1}\n", input, integral);
-            previousPolynomial = integral;
-        }
-        catch (Exception ex) 
-        {
-            tbAnswer.Text = String.Format("Error: {0}\n",ex.Message); 
+            try
+            {
+                if (inputDialog.InputValue == "")
+                {
+                    var input = tbInput.Text;
+                    var integral = Calculus.integratePolynomial(input);
+
+                    Console.WriteLine(integral);
+                    tbAnswer.Text += string.Format("Integral: {0} :\n{1}\n", input, integral);
+                    previousPolynomial = integral;
+                }
+                else
+                {
+                    var lowerBound = double.Parse(inputDialog.InputValue);
+                    var upperBound = double.Parse(inputDialog.InputValue2);
+                    var input = tbInput.Text;
+                    var answer = Calculus.definiteIntegral(input,upperBound,lowerBound);
+                    tbAnswer.Text += string.Format("Definite integration [{2},{3}]: {0} :\n{1}\n", input, answer,lowerBound,upperBound);
+                }
+            }
+            catch (Exception ex)
+            {
+                tbAnswer.Text = String.Format("Error: {0}\n", ex.Message);
+            }
         }
     }
 
@@ -407,12 +424,10 @@ public partial class MainWindow : Window
     {
         try
         {
-            //var inputDialog = new InputDialog();
-            // if (inputDialog.ShowDialog() == true)
-            if (true)
+            var inputDialog = new InputWindow("Enter X value for tangent: ");
+            if (inputDialog.ShowDialog() == true)
             {
-                // var xValue = Convert.ToInt32(inputDialog.InputText);
-                var xValue = 10;
+                var xValue = Convert.ToInt32(inputDialog.InputValue);
                 var input = tbInput.Text;
                 var derivative = Calculus.differentiateExpression(input);
                 interpreter.overrideX(xValue);
