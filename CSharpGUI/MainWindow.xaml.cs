@@ -67,7 +67,7 @@ public partial class MainWindow : Window
         {
             foreach (TextBox formulaBox in FormulaStackPanel.Children)
                 if (!string.IsNullOrEmpty(formulaBox.Text))
-                    viewModel.plotGraph(formulaBox, 49);
+                    viewModel.plotGraph(formulaBox, 99);
         }
         catch (Exception ex)
         {
@@ -489,7 +489,7 @@ public partial class MainWindow : Window
                 Console.WriteLine(tangentEquation);
                 var fakeBox = new TextBox();
                 fakeBox.Text = tangentEquation; //very hacky fix
-                viewModel.plotGraph(fakeBox, 49);
+                viewModel.plotGraph(fakeBox, 99);
             }
         }
         catch (Exception ex) 

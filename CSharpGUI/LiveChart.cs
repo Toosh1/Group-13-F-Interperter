@@ -40,25 +40,20 @@ namespace LiveChart
         Dictionary<TextBox, LineSeries<ObservablePoint>> lineSeriesDict = new Dictionary<TextBox, LineSeries<ObservablePoint>>();
         public ObservableCollection<ISeries> Series { get; set; }
         public ObservableCollection<ObservablePoint> _observablePoints { get; set; }
-
         private bool _pointerDown = false;
         private LvcPointD panStartPos = new(0, 0);
         private DispatcherTimer scrollTimer = new DispatcherTimer();
         private static readonly int limitScale = 10;
         private static readonly double mouseSensitivity = 0.001f;
-        private static readonly int RESOLUTION = 49;
-        
-        // Sections (for lines at x = 0 and y = 0)
-        //public ObservableCollection<RectangularSection> Sections { get; set; }
+        private static readonly int RESOLUTION = 99;
 
         // Thread-safety mechanisms
         private readonly object _syncLock = new object();
         private bool _isReading = true;
 
-        // Constructor
         public ViewModel()
         {
-            // Initialize observable points
+            /// Viewmodel constructor 
             _observablePoints = new ObservableCollection<ObservablePoint>
             {
                 new ObservablePoint(0, 4),
@@ -66,7 +61,6 @@ namespace LiveChart
                 new ObservablePoint(3, 2)
             };
 
-            // Series setup
             Series = new ObservableCollection<ISeries>
             {
                 new LineSeries<ObservablePoint>
@@ -78,30 +72,11 @@ namespace LiveChart
                 }
             };
 
-            // Sections setup for x=0 and y=0
-            /*
-            Sections = new ObservableCollection<RectangularSection>
-            {
-                new RectangularSection
-                {
-                    Xi = 0, // Vertical line at x = 0
-                    Xj = 0,
-                    Stroke = new SolidColorPaint(SKColors.LightSlateGray) { StrokeThickness = 2 }
-                },
-                new RectangularSection
-                {
-                    Yi = 0, // Horizontal line at y = 0
-                    Yj = 0,
-                    Stroke = new SolidColorPaint(SKColors.LightSlateGray) { StrokeThickness = 2 }
-                }
-            };*/
-
-            // Setup scroll zoom timer
             scrollTimer.Interval = TimeSpan.FromMilliseconds(500);
             scrollTimer.Tick += scrollTimerTick;
  
             // Start multi-threaded data updates
-            StartReadingData();
+            // StartReadingData();
         }
 
         [RelayCommand]
@@ -121,7 +96,7 @@ namespace LiveChart
         [RelayCommand]
         public void PointerMove(PointerCommandArgs args)
         {
-            // Panning
+            // Pan viewport
             if (!_pointerDown) return;
 
             // Calculate delta
@@ -142,8 +117,6 @@ namespace LiveChart
         public void PointerUp(PointerCommandArgs args)
         {
             _pointerDown = false;
-
-            // Recalculate points
             replot(RESOLUTION);
         }
 
@@ -276,10 +249,12 @@ namespace LiveChart
             }
         };
 
-        // Returns / Creates line series
         public LineSeries<ObservablePoint> getUniqueSeries(TextBox key)
         {
-            // Create series if non existent
+            /// Returns / Creates line series
+            /// Parameters: 'TextBox' used as dictionary key
+            /// Return: 'LineSeries<ObservablePoint>'
+
             if (!lineSeriesDict.ContainsKey(key))
             {
                 LineSeries<ObservablePoint> lineSeries = new LineSeries<ObservablePoint>
@@ -298,26 +273,19 @@ namespace LiveChart
             }
             else
             {
-                lineSeriesDict.TryGetValue(key, out var lSeries); // Error checking should be done
+                lineSeriesDict.TryGetValue(key, out var lSeries);
                 return lSeries;
             }
         }
 
         public void removeSeries(TextBox key)
         {
-            // Check if series exists
             if (lineSeriesDict.ContainsKey(key))
             {
                 lineSeriesDict.TryGetValue(key, out var lSeries);
-                Series.Remove(lSeries);     // Remove from Seires
-                lineSeriesDict.Remove(key); // Delete dictionary link
+                Series.Remove(lSeries);
+                lineSeriesDict.Remove(key);
             }
-        }
-
-        // Reset points
-        public void Reset()
-        {
-            _observablePoints.Clear();
         }
 
         public void ResetSeries(LineSeries<ObservablePoint> lineSeries)
@@ -325,22 +293,17 @@ namespace LiveChart
             lineSeries.Values.Clear();
         }
 
-        // Add point to series
-        public void AddItem(ObservablePoint point)
-        {
-            _observablePoints.Add(point);
-        }
-
-        // Add points to line series
         public void AddToSeries(LineSeries<ObservablePoint> lineSeries, ObservablePoint point)
         {
             lineSeries.Values.Add(point);
         }
 
-        // Plot points
         public void plotGraph(TextBox formulaBox, int res)
         {
-            // Create line series if none associated
+            /// Plots graph from provided equation.
+            /// Parameters: 'TextBox' containing formula | 'Int' denoting graph resolution
+            /// Return: 'Void'
+
             LineSeries<ObservablePoint> lineSeries = getUniqueSeries(formulaBox);
             ResetSeries(lineSeries);
            
@@ -361,117 +324,121 @@ namespace LiveChart
 
             // Resolution pass
             int passClear = resPassGC(formulaBox);
-            int maxPasses = 2;
+            int maxPasses = 3;
             while (passClear != 0 && maxPasses >= 0)
             {
                 passClear = resPassGC(formulaBox);
                 maxPasses -= 1;
             }
+
+            // Asymptote pass
+            checkAsymptote(formulaBox);
         }
 
-        // Replot
         private void replot(int res)
         {
+            /// Replot, redraws graph
+            /// Parameters: 'Int' indicating resolution
+            /// Return: 'Void'
             foreach (TextBox plotKey in lineSeriesDict.Keys)
             {
                 plotGraph(plotKey, res);
             }
         }
 
-        // Resolution pass (gradient change)
+        private void checkAsymptote(TextBox formulaBox)
+        {
+            /// Deletes lines located on asymptote
+            /// Parameters: 'TextBox' containing formula
+            /// Return: 'Void'
+            LineSeries<ObservablePoint> lineSeries = getUniqueSeries(formulaBox);
+            ICollection<ObservablePoint> updatedPoints = new List<ObservablePoint>();
+            ObservablePoint previousPoint = null;
+            double previousGradient = 0;
+            double gradient = 0;
+
+            foreach (ObservablePoint point in lineSeries.Values)
+            {
+                
+                if (previousPoint != null)
+                {
+                    gradient = (previousPoint.Y - point.Y ?? 0) / (previousPoint.X - point.X ?? 0);
+                    if ((previousPoint.Y * point.Y) < 0 && (previousGradient * gradient) < 0)
+                    {
+                        updatedPoints.Add(null);
+                    }
+
+                }
+                previousPoint = point;
+                previousGradient = gradient;
+                updatedPoints.Add(point);
+            }
+            // Assign points
+            lineSeries.Values = updatedPoints;
+        }
+
         private int resPassGC(TextBox formulaBox)
         {
-            double threshold = 1.0f;
+            /// Resolution pass, iterates over current values in graph, inserting new points at midpoint.
+            /// Parameters: 'TextBox' containing formula | 'Bool' denoting if pass is final 
+            /// Return: 'Int' indicating completion
+            double threshold = 0.02f;
             int pass = 0;
-
-            // Get line series
             LineSeries<ObservablePoint> lineSeries = getUniqueSeries(formulaBox);
 
-            // Integrate to find gradient
             string derivative = "y = " + Calculus.differentiateExpression(formulaBox.Text);
 
-            // Temp formatting fix
+            // Fix formatting
             derivative = Regex.Replace(derivative, @"(\d)(x)", "$1*$2");
-            Debug.Print(derivative);
-            // Iterate over points, insert new when gradient change below/above threshold
+            derivative = Regex.Replace(derivative, @"(\b(?:sin|cos|tan|sec|csc|cot)\b)\^(\d+)\(([^)]+)\)", "$1($3)^$2");
+            
             ObservablePoint previousPoint = null;
             double previousGradient = 0;
             ICollection<ObservablePoint> updatedPoints = new List<ObservablePoint>();
+
+            // Insert points
+            double gradient = 0.5;
+            bool tryLock = false;
             foreach (ObservablePoint point in lineSeries.Values)
             {
-                // Find gradient associated with point
-                interpreter.overrideX(point.X ?? 0);
-                double gradient = interpreter.solve(derivative);
+                if (tryLock == false)
+                {
+                    try
+                    {
+                        interpreter.overrideX(point.X ?? 0);
+                        gradient = interpreter.solve(derivative);
+                    }
+                    catch (Exception)
+                    {
+                        gradient = 0.5;
+                        tryLock = true;
+                    }
+                }
 
-                // Calculate gradient change
                 if (previousPoint != null)
                 {
                     double gradChange = gradient - previousGradient;
+
+                    // Insert new point
                     if (Math.Abs(gradChange) < threshold)
                     {
-                        // Indicate pass was completed
                         pass = 1;
-
-                        //Calculate midpoint
                         double midpoint = (double)((previousPoint.X + point.X) / 2.0);
 
-                        // Calculate new point
                         interpreter.overrideX(midpoint);
                         double answer = interpreter.solve(formulaBox.Text);
                         ObservablePoint newPoint = new ObservablePoint(midpoint, answer);
 
-                        // Insert point
                         updatedPoints.Add(newPoint);
                     }
                 }
                 updatedPoints.Add(point);
                 previousPoint = point;
+                previousGradient = gradient;
             }
             // Assign points
             lineSeries.Values = updatedPoints;
             return pass;
-        }
-        // Resolution Pass
-        private int resPass(TextBox formulaBox) // Returns 0 when no more passes are made
-        {
-            double THRESHOLD = 5.0;
-            int complete = 0;
-            // Get old series
-            LineSeries<ObservablePoint> lineSeries = getUniqueSeries(formulaBox);
-
-            // Loop over points, insert when gradient above threshold
-            ICollection<ObservablePoint> updatedPoints = new List<ObservablePoint>();
-            ObservablePoint previousPoint = null;
-            foreach (ObservablePoint point in lineSeries.Values)
-            {
-                // Calculate gradient
-                if (previousPoint != null)
-                {
-                    double gradient = (double)((point.Y - previousPoint.Y) / (point.X - previousPoint.X));
-                    if (Math.Abs(gradient) > THRESHOLD)
-                    {
-                        // Indicate a pass was completed
-                        complete = 1;
-
-                        // Calculate X midpoint
-                        double midpoint = (double)((previousPoint.X + point.X) / 2.0);
-
-                        // Calculate new point
-                        interpreter.overrideX(midpoint);
-                        double answer = interpreter.solve(formulaBox.Text);
-                        ObservablePoint newPoint = new ObservablePoint(midpoint, answer);
-
-                        // Insert point
-                        updatedPoints.Add(newPoint);
-                    }
-                }
-                updatedPoints.Add(point);
-                previousPoint = point;
-            }
-
-            // Assign points
-            lineSeries.Values = updatedPoints;
-            return complete;
         }
     }
 }
