@@ -9,19 +9,14 @@ module public interpreter
     open System
     open System.Collections.Generic
     open System.Text.RegularExpressions
-
-    // Define terminal symbols, now supporting floating-point numbers (Num of float)
     type terminal = 
         Add | Sub | Mul | Div | Lpar | Rpar | Rem | Pow | Num of float | Sin | Cos | Tan | Arcsin | Arccos | Arctan |Exp |Log |Pi| Euluer | Csc | Cot | Sec
         | Var of char
         | Assign
         
 
-    let str2lst s = [for c in s -> c] // Converts string into list of characters
-
-    let floatVal (c:char) = (float)((int)c - (int)'0') // Converts character digit into float
-
-    // Function for floating-point power
+    let str2lst s = [for c in s -> c] 
+    let floatVal (c:char) = (float)((int)c - (int)'0') 
     let rec floatPow num exp = 
         if exp = 0.0 then 1.0
         elif exp = 1.0 then num
