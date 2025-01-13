@@ -7,11 +7,9 @@ module FSharpLibrary.LinearAlgebra
     open System
     open System.Collections.Generic
     open System.Text.RegularExpressions
-       //Define a type for vectors and   matrices
     type Vector = float list
     type Matrix = float list list
 
-    //Vector operations
     module VectorOps =
         let dotProduct (v1: Vector) (v2: Vector) =
             if List.length v1 <> List.length v2 then
@@ -27,7 +25,6 @@ module FSharpLibrary.LinearAlgebra
         let norm (v: Vector) =
             Math.Sqrt(v |> List.sumBy (fun x -> x * x))
 
-    //Matrix operations
     module MatrixOps =
         let determinant (matrix: Matrix) =
             let rec det m =
