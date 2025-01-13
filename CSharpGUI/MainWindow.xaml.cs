@@ -31,10 +31,23 @@ public partial class MainWindow : Window
         viewModel = new ViewModel();
         DataContext = viewModel;
     }
-
+    
     public SeriesCollection ChartSeries { get; set; }
-    private ViewModel viewModel { get; }
+    private ViewModel viewModel { get; set; }
 
+    public void Reset_Graph()
+    {
+        ChartSeries = new SeriesCollection
+        {
+            new LineSeries
+            {
+                Title = "Data Series",
+                Values = new ChartValues<double>() 
+            }
+        };
+        viewModel = new ViewModel();
+        DataContext = viewModel;
+    }
 
     private void BtnAnswer_OnClick(object sender, RoutedEventArgs e)
     {
@@ -60,6 +73,7 @@ public partial class MainWindow : Window
 
     private void BtnPlot_OnClick(object sender, RoutedEventArgs e)
     {
+        Reset_Graph();
         try
         {
             foreach (TextBox formulaBox in FormulaStackPanel.Children)
