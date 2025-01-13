@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -10,12 +11,17 @@ using FSharpLibrary;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Drawing;
+using LiveChartsCore.Kernel;
 using LiveChartsCore.Kernel.Events;
 using LiveChartsCore.Kernel.Sketches;
+using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing;
+using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
+using LiveChartsCore.SkiaSharpView.VisualElements;
+using LiveChartsCore.VisualElements;
 using SkiaSharp;
 // Plotting and Live Charts
 // Author: Samuel Chaney
@@ -32,6 +38,8 @@ namespace LiveChart
         Dictionary<TextBox, LineSeries<ObservablePoint>> lineSeriesDict = new Dictionary<TextBox, LineSeries<ObservablePoint>>();
         public ObservableCollection<ISeries> Series { get; set; }
         public ObservableCollection<ObservablePoint> _observablePoints { get; set; }
+        public IEnumerable<ChartElement<SkiaSharpDrawingContext>> VisualElements { get; set; }
+        private List<ChartElement<SkiaSharpDrawingContext>> rootPoints = new List<ChartElement<SkiaSharpDrawingContext>>();
         private bool _pointerDown = false;
         private LvcPointD panStartPos = new(0, 0);
         private DispatcherTimer scrollTimer = new DispatcherTimer();
@@ -63,7 +71,8 @@ namespace LiveChart
 
             scrollTimer.Interval = TimeSpan.FromMilliseconds(500);
             scrollTimer.Tick += scrollTimerTick;
-            
+
+            VisualElements = rootPoints;
         }
 
         [RelayCommand]
@@ -245,6 +254,29 @@ namespace LiveChart
             lineSeries.Values.Add(point);
         }
 
+        public void drawPoints()
+        {
+            VisualElements = rootPoints;
+            XAxes[0].MinLimit += 0.01f;
+            XAxes[0].MinLimit -= 0.01f;
+        }
+        
+        public void addPoints(double x, double y)
+        {
+            GeometryVisual<CircleGeometry> rootCircle = new GeometryVisual<CircleGeometry>
+            {
+                X = x-.1f,
+                Y = y+.1f,
+                LocationUnit = MeasureUnit.ChartValues,
+                Width = .2f,
+                Height = .2f,
+                SizeUnit = MeasureUnit.ChartValues,
+                Fill = new SolidColorPaint(new SKColor(225, 225, 245, 255)) { ZIndex = 10 },
+                Stroke = new SolidColorPaint(new SKColor(225, 225, 245)) { ZIndex = 10, StrokeThickness = 1.5f },
+            };
+            rootPoints.Add(rootCircle);
+        }
+
         public void plotGraph(TextBox formulaBox, int res)
         {
             /// Plots graph from provided equation.
@@ -282,7 +314,7 @@ namespace LiveChart
             checkAsymptote(formulaBox);
         }
 
-        private void replot(int res)
+        public void replot(int res)
         {
             /// Replot, redraws graph
             /// Parameters: 'Int' indicating resolution

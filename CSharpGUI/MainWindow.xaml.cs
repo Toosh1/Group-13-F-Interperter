@@ -205,6 +205,12 @@ public partial class MainWindow : Window
 
             var uniqueRoots = roots.Select(r => Math.Round(r, 5)).Distinct().ToList();
             tbAnswer.Text += string.Format("Roots for {0} :\n{1}\n", input, string.Join(", ", uniqueRoots));
+
+            foreach (var root in uniqueRoots)
+            {
+                viewModel.addPoints(root, 0.0f);
+            }
+            viewModel.drawPoints();
         }
         catch (Exception ex) 
         {

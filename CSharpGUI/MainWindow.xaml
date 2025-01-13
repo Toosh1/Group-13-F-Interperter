@@ -146,6 +146,7 @@
                             PointerPressedCommand="{Binding PointerDownCommand}"
                             PointerMoveCommand="{Binding PointerMoveCommand}"
                             PointerReleasedCommand="{Binding PointerUpCommand}"
+                            VisualElements="{Binding VisualElements}"
                             ZoomMode="None"
                             MouseWheel="CartesianChart_MouseWheel"
                             x:Name="CartChart">
