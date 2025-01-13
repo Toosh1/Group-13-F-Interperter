@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Converters;
 using System.Windows.Threading;
-using System.Xml.Schema;
 using CommunityToolkit.Mvvm.Input;
 using FSharpLibrary;
 using LiveChartsCore;
@@ -25,8 +17,8 @@ using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using SkiaSharp;
-using static Microsoft.FSharp.Core.ByRefKinds;
-
+// Plotting and Live Charts
+// Author: Samuel Chaney
 namespace LiveChart
 {
     public partial class ViewModel
@@ -46,10 +38,7 @@ namespace LiveChart
         private static readonly int limitScale = 10;
         private static readonly double mouseSensitivity = 0.001f;
         private static readonly int RESOLUTION = 99;
-
-        // Thread-safety mechanisms
-        private readonly object _syncLock = new object();
-        private bool _isReading = true;
+        
 
         public ViewModel()
         {
@@ -74,9 +63,7 @@ namespace LiveChart
 
             scrollTimer.Interval = TimeSpan.FromMilliseconds(500);
             scrollTimer.Tick += scrollTimerTick;
- 
-            // Start multi-threaded data updates
-            // StartReadingData();
+            
         }
 
         [RelayCommand]
@@ -142,48 +129,8 @@ namespace LiveChart
             replot(RESOLUTION);
         }
 
+        
 
-        // Multi-threaded data addition
-        private void StartReadingData()
-        {
-            // Create multiple tasks to simulate concurrent data updates
-            int readTasks = 5;  // Number of tasks to run concurrently
-
-            for (int i = 0; i < readTasks; i++)
-            {
-                Task.Run(ReadData);
-            }
-        }
-
-        // Simulate reading data in parallel
-        private async Task ReadData()
-        {
-            Random random = new Random();
-            int currentValue = _observablePoints.Count > 0 ? (int)_observablePoints[^1].Y : 0;
-
-            while (_isReading)
-            {
-                await Task.Delay(100);  // Simulate delay
-
-                // Randomly modify the Y value for the new point
-                double newYValue = currentValue + random.Next(-10, 10);
-                ObservablePoint newPoint = new ObservablePoint(_observablePoints.Count, newYValue);
-
-                // Add the new point to the ObservableCollection in a thread-safe manner
-                lock (_syncLock)
-                {
-                    // Keep only a fixed number of points for simplicity (e.g., 100 points)
-                    if (_observablePoints.Count > 100)
-                    {
-                        _observablePoints.RemoveAt(0);  // Remove the oldest point
-                    }
-
-                    _observablePoints.Add(newPoint);
-                }
-
-                currentValue = (int)newYValue;  // Update the current value for next iteration
-            }
-        }
 
         // Axes setup
         public ICartesianAxis[] XAxes { get; set; } =

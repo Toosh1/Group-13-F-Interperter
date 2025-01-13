@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ZHaeVqmpWx8=",
+  "dgSpecHash": "uUn9+bymZvA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mateusz\\Documents\\GitHub\\F-Interpreter\\Learning\\FSharpLibrary\\FSharpLibrary.fsproj",
+  "projectFilePath": "C:\\Users\\mateu\\Documents\\GitHub\\Group-13-F-Interperter\\FSharpLibrary\\FSharpLibrary.fsproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Mateusz\\.nuget\\packages\\fsharp.core\\6.0.2\\fsharp.core.6.0.2.nupkg.sha512"
+    "C:\\Users\\mateu\\.nuget\\packages\\fsharp.core\\6.0.7\\fsharp.core.6.0.7.nupkg.sha512"
   ],
   "logs": []
 }

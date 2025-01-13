@@ -9,7 +9,9 @@ using Learning.Views;
 using LiveChart;
 using LiveCharts;
 using LiveCharts.Wpf;
-
+// Simple Interpreter in F# 
+// Author: Mateusz Gorecki 
+// Modifications by: Samuel Chaney
 namespace Learning;
 
 public partial class MainWindow : Window
@@ -25,14 +27,11 @@ public partial class MainWindow : Window
             new LineSeries
             {
                 Title = "Data Series",
-                Values = new ChartValues<double>() // Start with an empty series
+                Values = new ChartValues<double>() 
             }
-        };
-
-        // Set data context for binding
+        };  
         viewModel = new ViewModel();
         DataContext = viewModel;
-        //DataContext = this; ADD BACK LATER
     }
 
     public SeriesCollection ChartSeries { get; set; }
@@ -350,7 +349,6 @@ public partial class MainWindow : Window
 
     private void SwitchView_OnClick(object sender, RoutedEventArgs e)
     {
-        // Toggle visibility of the matrix input grid
         if (MatrixButtonGrid.Visibility == Visibility.Collapsed)
         {
             Matrix5Grid1.Visibility = Visibility.Visible;
@@ -392,8 +390,7 @@ public partial class MainWindow : Window
                 Matrix5Grid2.RowDefinitions.Add(new RowDefinition());
                 Matrix5Grid2.ColumnDefinitions.Add(new ColumnDefinition());
             }
-
-            // Populate grid with TextBoxes
+            
             for (int row = 0; row < size; row++)
             {
                 for (int col = 0; col < size; col++)
@@ -427,11 +424,8 @@ public partial class MainWindow : Window
 
     public void ClearMatrix()
     {
-        // Clear children (TextBoxes)
         Matrix5Grid1.Children.Clear();
         Matrix5Grid2.Children.Clear();
-
-        // Clear row and column definitions
         Matrix5Grid1.RowDefinitions.Clear();
         Matrix5Grid1.ColumnDefinitions.Clear();
         Matrix5Grid2.RowDefinitions.Clear();
@@ -441,33 +435,24 @@ public partial class MainWindow : Window
     private string GetGridValues(Grid grid)
     {
         var rows = new List<string>();
-
-        // Loop through all rows
         foreach (var rowDefinition in grid.RowDefinitions)
         {
             var rowValues = new List<string>();
-
-            // Loop through each child in the grid
             foreach (var child in grid.Children)
             {
                 if (child is TextBox textBox)
                 {
-                    // Check if the TextBox is in the current row and is not empty
                     if (Grid.GetRow(textBox) == grid.RowDefinitions.IndexOf(rowDefinition) && !string.IsNullOrWhiteSpace(textBox.Text))
                     {
                         rowValues.Add(textBox.Text);
                     }
                 }
             }
-
-            // If there are any values in the row, join them with commas and add to the rows list
             if (rowValues.Count > 0)
             {
                 rows.Add(string.Join(",", rowValues));
             }
         }
-
-        // Join all rows with semicolons and return the final string
         return string.Join(";", rows);
     }
 
