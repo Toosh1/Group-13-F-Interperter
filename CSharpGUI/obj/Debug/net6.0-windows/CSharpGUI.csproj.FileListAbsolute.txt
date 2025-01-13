@@ -366,3 +366,4 @@ C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\obj\Debug\net6.
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\Views\InputWindow.g.cs
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\Views\InputWindow.baml
 C:\Users\Mateusz\Documents\GitHub\F-Interpreter\Learning\CSharpGUI\obj\Debug\net6.0-windows\App.baml
+C:\Users\mateu\Documents\GitHub\Group-13-F-Interperter\CSharpGUI\obj\Debug\net6.0-windows\App.baml

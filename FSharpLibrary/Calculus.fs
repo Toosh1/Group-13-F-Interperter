@@ -1,7 +1,6 @@
-﻿// Calculus Function
+﻿// Calculus Functions
 // Author: Joshua Allan 
-// Date: <Today's Date>
-// Reference: Peter Sestoft, Grammars and parsing with F#, Tech. Report
+
 
 module FSharpLibrary.Calculus
     open System

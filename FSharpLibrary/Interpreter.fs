@@ -1,6 +1,6 @@
 ﻿// Simple Interpreter in F# 
-// Author: R.J. Lapeer + Mateusz Gorecki 
-// Modifications by: Joshua Allan
+// Author: R.J. Lapeer
+// Modifications by: Mateusz Gorecki 
 // Date: <Today's Date>
 // Reference: Peter Sestoft, Grammars and parsing with F#, Tech. Report
 

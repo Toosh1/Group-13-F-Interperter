@@ -1,7 +1,7 @@
 ﻿// Calculus Function
 // Author: Joshua Allan 
-// Date: <Today's Date>
-// Reference: Peter Sestoft, Grammars and parsing with F#, Tech. Report
+
+
 
 module FSharpLibrary.LinearAlgebra
     open System
