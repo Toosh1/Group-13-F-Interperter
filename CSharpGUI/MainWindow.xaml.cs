@@ -9,9 +9,7 @@ using Learning.Views;
 using LiveChart;
 using LiveCharts;
 using LiveCharts.Wpf;
-// Simple Interpreter in F# 
-// Author: Mateusz Gorecki 
-// Modifications by: Samuel Chaney
+
 namespace Learning;
 
 public partial class MainWindow : Window
@@ -29,7 +27,7 @@ public partial class MainWindow : Window
                 Title = "Data Series",
                 Values = new ChartValues<double>() 
             }
-        };  
+        };
         viewModel = new ViewModel();
         DataContext = viewModel;
     }
@@ -66,7 +64,7 @@ public partial class MainWindow : Window
         {
             foreach (TextBox formulaBox in FormulaStackPanel.Children)
                 if (!string.IsNullOrEmpty(formulaBox.Text))
-                    viewModel.plotGraph(formulaBox, 99);
+                    viewModel.plotGraph(formulaBox, 49);
         }
         catch (Exception ex)
         {
@@ -222,7 +220,7 @@ public partial class MainWindow : Window
                 if (inputDialog.InputValue == "")
                 {
                     var input = tbInput.Text;
-                    var integral = Calculus.integratePolynomial(input);
+                    var integral = Calculus.integrateExpression(input);
 
                     Console.WriteLine(integral);
                     tbAnswer.Text += string.Format("Integral: {0} :\n{1}\n", input, integral);
@@ -349,6 +347,7 @@ public partial class MainWindow : Window
 
     private void SwitchView_OnClick(object sender, RoutedEventArgs e)
     {
+        // Toggle visibility of the matrix input grid
         if (MatrixButtonGrid.Visibility == Visibility.Collapsed)
         {
             Matrix5Grid1.Visibility = Visibility.Visible;
@@ -390,7 +389,8 @@ public partial class MainWindow : Window
                 Matrix5Grid2.RowDefinitions.Add(new RowDefinition());
                 Matrix5Grid2.ColumnDefinitions.Add(new ColumnDefinition());
             }
-            
+
+            // Populate grid with TextBoxes
             for (int row = 0; row < size; row++)
             {
                 for (int col = 0; col < size; col++)
@@ -424,8 +424,11 @@ public partial class MainWindow : Window
 
     public void ClearMatrix()
     {
+        // Clear children (TextBoxes)
         Matrix5Grid1.Children.Clear();
         Matrix5Grid2.Children.Clear();
+
+        // Clear row and column definitions
         Matrix5Grid1.RowDefinitions.Clear();
         Matrix5Grid1.ColumnDefinitions.Clear();
         Matrix5Grid2.RowDefinitions.Clear();
@@ -453,6 +456,8 @@ public partial class MainWindow : Window
                 rows.Add(string.Join(",", rowValues));
             }
         }
+
+        // Join all rows with semicolons and return the final string
         return string.Join(";", rows);
     }
 
@@ -474,7 +479,7 @@ public partial class MainWindow : Window
                 Console.WriteLine(tangentEquation);
                 var fakeBox = new TextBox();
                 fakeBox.Text = tangentEquation; //very hacky fix
-                viewModel.plotGraph(fakeBox, 99);
+                viewModel.plotGraph(fakeBox, 49);
             }
         }
         catch (Exception ex) 
