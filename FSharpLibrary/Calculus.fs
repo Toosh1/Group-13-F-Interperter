@@ -234,7 +234,43 @@ module FSharpLibrary.Calculus
         let coefficients, powers = parsePolynomial poly
         let newCoefficients, newPowers = integrate coefficients powers
         polynomialToString newCoefficients newPowers
-       
+    
+    // Integration for special functions
+    let integrationRules =
+        dict [
+            "sin(x)", "-cos(x)"
+            "cos(x)", "sin(x)"
+            "tan(x)", "-ln|cos(x)|"
+            "ln(x)", "x * ln(x) - x"
+            "exp(x)", "exp(x)"
+        ]
+    
+
+
+    // Integration of special terms
+    let integrateSpecialTerms (terms: (string * float) list) : (string * float) list =
+        terms
+        |> List.collect (fun (term, coeff) ->
+            match integrationRules.TryGetValue(term) with
+            | true, integratedTerm -> [(integratedTerm, coeff)]
+            | false, _ -> [(term, 0.0)]
+        )
+        |> List.filter (snd >> ((<>) 0.0))
+
+
+
+    // Main integration function
+    let integrateExpression (expr: string) : string =
+        let (polyCoeffs, polyPowers), specialTerms = parseExpression expr
+        let newCoeffs, newPowers = integrate polyCoeffs polyPowers
+        let newSpecialTerms = integrateSpecialTerms specialTerms
+        let polyPart = polynomialToString newCoeffs newPowers
+        let specialPart = specialTermsToString newSpecialTerms
+
+        match polyPart, specialPart with
+        | "", _ -> specialPart
+        | _, "" -> polyPart
+        | _ -> polyPart + " + " + specialPart       
 
         
     // Function to evaluate the polynomial expression at a given x
