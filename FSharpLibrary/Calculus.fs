@@ -48,7 +48,7 @@ module FSharpLibrary.Calculus
         |> List.mapi (fun i coeff -> 
             let power = powers.[i]
             if power = 0 then None
-            else Some (coeff * float power, power - 1)  // Handling coefficients as floats
+            else Some (coeff * float power, power - 1)  
         )
         |> List.choose id
         |> List.unzip
@@ -77,7 +77,6 @@ module FSharpLibrary.Calculus
             
     let polynomialToString (coefficients: float list) (powers: int list) : string =
         let formatCoefficient coeff =
-            // Convert to integer if the coefficient is effectively an integer
             if coeff % 1.0 = 0.0 then 
                 (int coeff).ToString()
             else 
@@ -88,13 +87,13 @@ module FSharpLibrary.Calculus
             let formattedCoeff = formatCoefficient coeff
             let power = powers.[i]
             match power with
-            | 0 -> formattedCoeff // Constant term
-            | 1 -> sprintf "%sx" formattedCoeff // Linear term
-            | _ -> sprintf "%sx^%d" formattedCoeff power // Higher-order term
+            | 0 -> formattedCoeff
+            | 1 -> sprintf "%sx" formattedCoeff 
+            | _ -> sprintf "%sx^%d" formattedCoeff power
         )
-        |> List.filter (fun term -> term <> "0") // Remove terms with coefficient 0
+        |> List.filter (fun term -> term <> "0") 
         |> String.concat " + "
-        |> fun s -> s.Replace("+ -", "- ") // Clean up spaces around negatives
+        |> fun s -> s.Replace("+ -", "- ") 
 
 
 
@@ -104,7 +103,7 @@ module FSharpLibrary.Calculus
         polynomialToString newCoefficients newPowers
     
 
-    // Lookup table for differentiation rules
+
     let differentiationRules = 
         dict [
             "sin(x)", "cos(x)"
@@ -114,11 +113,11 @@ module FSharpLibrary.Calculus
             "exp(x)", "exp(x)"
         ]
 
-    // Parse expression into polynomials and special terms
+
     let parseExpression (expr: string) : (float list * int list) * (string * float) list =
         let specialPattern = @"([+-]?\d*\.?\d*)?(sin\(x\)|cos\(x\)|tan\(x\)|ln\(x\)|exp\(x\))"
 
-        // Function to parse special terms
+
         let parseSpecialTerms (expr: string) : (string * float) list =
             let matches = Regex.Matches(expr.Replace(" ", ""), specialPattern) :> seq<Match>
 
@@ -155,7 +154,7 @@ module FSharpLibrary.Calculus
         )
         |> List.filter (snd >> ((<>) 0.0))
 
-    // Convert special terms to string
+ 
     let specialTermsToString (terms: (string * float) list) : string =
         terms
         |> List.map (fun (term, coeff) ->
@@ -167,7 +166,7 @@ module FSharpLibrary.Calculus
         |> String.concat " + "
         |> fun s -> s.Replace("+ -", "- ")
 
-    // Main differentiation function
+
     let differentiateExpression (expr: string) : string =
         let (polyCoeffs, polyPowers), specialTerms = parseExpression expr
         let newCoeffs, newPowers = differentiate polyCoeffs polyPowers
@@ -180,7 +179,7 @@ module FSharpLibrary.Calculus
         | _, "" -> polyPart
         | _ -> polyPart + " + " + specialPart
             
-    //Chain rule
+
     let chainRule (outer: string) (inner: string) : string =
         let outerDerivative = differentiateExpression outer
 
@@ -189,18 +188,18 @@ module FSharpLibrary.Calculus
         let innerDerivative = differentiateExpression inner
 
         sprintf "(%s) * (%s)" replacedOuterDerivative innerDerivative
-    // Product Rule
+
     let productRule (u: string) (v: string) : string =
         let du = differentiateExpression u
         let dv = differentiateExpression v
         sprintf "(%s) * (%s) + (%s) * (%s)" du v u dv
 
-    // Quotient Rule
+    
     let quotientRule (u: string) (v: string) : string =
         let du = differentiateExpression u
         let dv = differentiateExpression v
         sprintf "((%s) * (%s) - (%s) * (%s)) / ((%s)^2)" du v u dv v
-     //identify which rule to use
+
     let identifyDifferentiationRule (expr: string) : string =
         let productPattern = @"(.+)\s*\*\s*(.+)"
         let quotientPattern = @"(.+)\s*\/\s*(.+)"
@@ -216,7 +215,7 @@ module FSharpLibrary.Calculus
         | _ when Regex.IsMatch(expr, subtractPattern) -> "Sum Rule"
         | _ -> "Polynomial Rule (basic differentiation)"
 
-    // Polynomial integration functions
+
     let integrate (coefficients: float list) (powers: int list) : float list * int list =
         coefficients
         |> List.mapi (fun i coeff -> 
@@ -235,7 +234,7 @@ module FSharpLibrary.Calculus
         let newCoefficients, newPowers = integrate coefficients powers
         polynomialToString newCoefficients newPowers
     
-    // Integration for special functions
+
     let integrationRules =
         dict [
             "sin(x)", "-cos(x)"
@@ -247,7 +246,7 @@ module FSharpLibrary.Calculus
     
 
 
-    // Integration of special terms
+
     let integrateSpecialTerms (terms: (string * float) list) : (string * float) list =
         terms
         |> List.collect (fun (term, coeff) ->
@@ -259,7 +258,7 @@ module FSharpLibrary.Calculus
 
 
 
-    // Main integration function
+
     let integrateExpression (expr: string) : string =
         let (polyCoeffs, polyPowers), specialTerms = parseExpression expr
         let newCoeffs, newPowers = integrate polyCoeffs polyPowers
@@ -273,7 +272,6 @@ module FSharpLibrary.Calculus
         | _ -> polyPart + " + " + specialPart       
 
         
-    // Function to evaluate the polynomial expression at a given x
     let evaluatePolynomial (coefficients: float list) (powers: int list) (x: float) : float =
         List.zip coefficients powers
         |> List.fold (fun acc (coeff, power) -> acc + (coeff * Math.Pow(x, float power))) 0.0
@@ -282,19 +280,18 @@ module FSharpLibrary.Calculus
         let coefficients, powers = parsePolynomial poly
         
         let integralCoefficients, integralPowers = integrate coefficients powers
-        
-        // Evaluate the antiderivative at the upper and lower bounds
+
         let f_b = evaluatePolynomial integralCoefficients integralPowers b
         let f_a = evaluatePolynomial integralCoefficients integralPowers a
         
         f_b - f_a
 
-    // Function to evaluate the derivative of the polynomial at a given x
+
     let evaluateDerivative (coefficients: float list) (powers: int list) (x: float) : float =
         let newCoefficients, newPowers = differentiate coefficients powers
         evaluatePolynomial newCoefficients newPowers x
 
-    // Newton-Raphson Method for finding roots of the polynomial
+
     let newtonRaphson (poly: string) (x0: float) (err: float) : float =
         let coefficients, powers = parsePolynomial poly
         let mutable root = x0
@@ -317,7 +314,7 @@ module FSharpLibrary.Calculus
         
         root
 
-    //Bi-section Method
+
     let bisectionStep (poly: string) (a: float) (b: float) : float =
         let coefficients, powers = parsePolynomial poly
 
